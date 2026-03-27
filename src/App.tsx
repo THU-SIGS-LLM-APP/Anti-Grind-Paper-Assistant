@@ -3,10 +3,11 @@ import { UploadZone } from './components/UploadZone';
 import { DocumentViewer, Page } from './components/DocumentViewer';
 import { AssistantPanel } from './components/AssistantPanel';
 import { extractTextFromPDF } from './services/pdf';
-import { FileText, Loader2, RefreshCw, Clock, Coffee, AlertTriangle, Zap, Presentation } from 'lucide-react';
+import { FileText, Loader2, RefreshCw, Clock, Coffee, AlertTriangle, Zap, Presentation, Wand2 } from 'lucide-react';
 import { PPTGenerator } from './components/PPTGenerator';
+import { FortuneTeller } from './components/FortuneTeller';
 
-type AppMode = 'reader' | 'ppt';
+type AppMode = 'reader' | 'ppt' | 'fortune';
 
 export default function App() {
   const [appMode, setAppMode] = useState<AppMode>('reader');
@@ -87,6 +88,13 @@ export default function App() {
               <Presentation size={16} />
               组会 PPT 救星
             </button>
+            <button 
+              onClick={() => setAppMode('fortune')}
+              className={`px-4 py-1.5 text-sm font-medium rounded-md transition-colors flex items-center gap-1.5 ${appMode === 'fortune' ? 'bg-white text-purple-700 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+            >
+              <Wand2 size={16} />
+              科研算命
+            </button>
           </div>
         </div>
         {fileName && appMode === 'reader' && (
@@ -120,6 +128,8 @@ export default function App() {
       <main className="flex-1 overflow-hidden">
         {appMode === 'ppt' ? (
           <PPTGenerator />
+        ) : appMode === 'fortune' ? (
+          <FortuneTeller />
         ) : isExtracting ? (
           <div className="flex flex-col items-center justify-center h-full space-y-4">
             <Loader2 className="w-10 h-10 animate-spin text-emerald-500" />

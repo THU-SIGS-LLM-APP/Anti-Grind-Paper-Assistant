@@ -91,3 +91,24 @@ export async function generateBSReport(documentText: string): Promise<string> {
     return "生成失败，导师今天可能心情不好，建议明天再糊弄。";
   }
 }
+
+export async function generateFortune(documentText: string): Promise<string> {
+  try {
+    const response = await ai.models.generateContent({
+      model: 'gemini-3.1-pro-preview',
+      contents: `你是一个精通学术圈潜规则的“赛博算命大师”。请根据以下论文内容，为这篇论文“算一卦”，预测它的投稿命运。
+要求输出格式如下：
+【卦象】（从 大吉、中吉、小吉、平、凶、大凶 中选一个，要符合论文的实际水平，可以毒舌一点）
+【判词】（一句四字或七字的打油诗，总结论文命运，比如“缝合怪文，必被拒稿”或“顶会之姿，引用破万”）
+【玄学分析】（结合论文的具体内容，用算命的口吻进行吐槽或夸奖。比如“老夫观你这公式印堂发黑，Reviewer 2 必定看不懂而大发雷霆...”）
+【化解之法】（给出一个极其不靠谱或搞笑的建议，比如“建议在致谢里加上 Reviewer 2 永远健康”、“把标题里的基于改成赋能”）
+
+论文内容：
+${documentText.substring(0, 8000)}...`,
+    });
+    return response.text || '';
+  } catch (error) {
+    console.error("Fortune error:", error);
+    return "算命失败，天机不可泄漏，或者你的论文把 AI 算宕机了。";
+  }
+}
